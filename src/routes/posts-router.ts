@@ -28,7 +28,6 @@ postsRouter.post('/',auth,
         const blogger = await bloggersRepository.findBloggerById(bloggerId)
         if (!blogger) {
             res.status(400).send({
-                resultCode: 1,
                 errorsMessages: [{message: 'no blogger with this id', field: 'bloggerId'}]
             })
             return

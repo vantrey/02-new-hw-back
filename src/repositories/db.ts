@@ -3,10 +3,10 @@ import {PostType} from './posts-repository'
 import {BloggerType} from './bloggers-repository'
 
 // const mongoUri = process.env.mongoURI || "mongodb://0.0.0.0:27017";
-const mongoUri = 'mongodb+srv://admin:admin@express.knv2b.mongodb.net/express?retryWrites=true&w=majority';
+const mongoUri = 'mongodb+srv://ivan:123456QWERTYasdfgh@cluster0.czpft.mongodb.net/lessons';
 
 export const client = new MongoClient(mongoUri);
-const connection = client.db("myBd")
+const connection = client.db("lessons")
 
 export const posts = connection.collection<PostType>('posts')
 export const bloggers = connection.collection<BloggerType>('bloggers')

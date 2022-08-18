@@ -1,17 +1,13 @@
 import {NextFunction, Request, Response} from 'express'
 import {body, validationResult} from 'express-validator'
+import {bloggersRepository} from '../repositories/bloggers-db-repository';
 
 export const inputValidationMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-        let newErrors = errors.array()
-        let countYoutubeUrl = 0
-        errors.array().forEach(e => e.param ==='youtubeUrl' && countYoutubeUrl++)
-        if(countYoutubeUrl>1){
-            newErrors = errors.array().filter((e) =>  !(e.param ==='youtubeUrl' && e.msg.includes('length 2-100 ')) )
-        }
+        let newErrors = errors.array({onlyFirstError: true})
+
         res.status(400).json({
-            resultCode: 1,
             errorsMessages: newErrors.map((e) => ({
                 message: e.msg,
                 field: e.param
@@ -59,6 +55,13 @@ export const shortDescriptionValidation = body('shortDescription').trim().isLeng
     .withMessage('shortDescription is required and its Klength should be 2-100 symbols')
 export const contentValidation = body('content').trim().isLength({min: 2, max: 1000})
     .withMessage('content is required and its length should be 2-100 symbols')
-export const bloggerIdValidation = body('bloggerId').isNumeric()
-    .withMessage('bloggerId is required and its number')
+
+export const bloggerIdValidation = body('bloggerId').isNumeric().custom(async (value: number) => {
+    const blogger = await bloggersRepository.findBloggerById(value)
+    if(!blogger) {
+        throw new Error('that blogger doesnt exist');
+    }
+
+    return true
+})
 

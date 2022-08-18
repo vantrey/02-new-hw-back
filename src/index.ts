@@ -4,6 +4,7 @@ import bodyParser from 'body-parser'
 import {bloggersRouter} from './routes/bloggers-router'
 import {postsRouter} from './routes/posts-router'
 import {runDb} from './repositories/db'
+import {testingRouter} from './routes/testing-router';
 //create express app
 const app = express()
 
@@ -19,6 +20,7 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use('/bloggers', bloggersRouter)
 app.use('/posts', postsRouter)
+app.use('/testing', testingRouter)
 //start app
 
 const startApp = async () => {
